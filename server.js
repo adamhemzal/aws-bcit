@@ -3,6 +3,9 @@ const app = express();
 
 app.use(express.json());
 
+// Before the other routes
+app.use(express.static("build"));
+
 const catList = [
   {
     id: 1,
@@ -52,6 +55,12 @@ app.post("/api/cats", (req, res) => {
   data.id = catList.length + 1;
   catList.push(data);
   res.send(data);
+});
+
+// After all other routes
+
+app.get("*", (req, res) => {
+  res.sendFile("build/index.html");
 });
 
 const port = process.env.PORT || 8080;
